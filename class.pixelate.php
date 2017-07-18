@@ -19,82 +19,82 @@
  * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  */
 
-class pixelate {
+class Pixelate {
     /**
      * relative path to custom image file inc. filename and extension
      * @string
     */
-	protected $ImagePath;
+	protected $imagePath;
     /**
      * Readed Image filestream
      * @resource
     */
-	protected $ImageResource;
+	protected $imageResource;
     /**
      * X direction Resolution of loaded image
      * @integer
     */
-	protected $ResolutionWidth;
+	protected $resolutionWidth;
     /**
      * Y direction Resolution of loaded image
      * @integer
     */
-	protected $ResolutionHeight;
+	protected $resolutionHeight;
     /**
      * number of pixel width for chunk
      * @integer
     */
-	protected $ChunkSizeWidth;
+	protected $chunkSizeWidth;
     /**
      * number of pixel height for chunk
      * @integer
     */
-	protected $ChunkSizeHeight;
+	protected $chunkSizeHeight;
     /**
      * average color collection of every chunk
      * @array
     */
-	protected $ColorsCollection = array();
+	protected $colorsCollection = array();
     /**
      * Width of Image resolution width / chunksize width
      * @float
     */
-	protected $TempImageWidth;
+	protected $tempImageWidth;
     /**
      * Width of Image resolution height / chunksize height
      * @float
     */
-	protected $TempImageHeight;
+	protected $tempImageHeight;
     /**
      * Width of Image in pixel
      * @int
     */
-	protected $ResultImageWidth;
+	protected $resultImageWidth;
     /**
      * number of chunks per row
      * @integer
     */
-	protected $ResultImageCols;
+	protected $resultImageCols;
     /**
      * number of chunk rows
      * @integer
     */
-	protected $ResultImageRows;
+	protected $resultImageRows;
     /**
      * future result image path
      * @string
     */
-	protected $ResultImagePath;
+	protected $resultimagePath;
 
     /**
      * public function new class([string],[string],[int],[int])
     */
 	public function __construct($path, $output, $chunkwidth, $chunkheight){
-		$this->ImageResource 	= @ImageCreateFromJPEG($path);
-		$this->ImagePath 		= $path;
-		$this->ChunkSizeWidth 	= $chunkwidth;
-		$this->ChunkSizeHeight 	= $chunkheight;
-		$this->ResultImagePath 	= $output;
+		$this->imageResource 	= @ImageCreateFromJPEG($path);
+		$this->imagePath 		= $path;
+		$this->chunkSizeWidth 	= $chunkwidth;
+		$this->chunkSizeHeight 	= $chunkheight;
+		$this->resultimagePath 	= $output;
 	}
 
     /**
@@ -102,14 +102,14 @@ class pixelate {
      * @echo
     */
 	public function debug(){
-		echo "Imagepath: "		.$this->getImagePath()			."<br>";
-		echo "Resolution X: "	.$this->getResolutionWidth()	."<br>";
-		echo "Resolution Y: "	.$this->getResolutionHeight()	."<br>";
-		echo "Chunk X: "		.$this->getChunkSizeWidth()		."<br>";
-		echo "Chunk Y: "		.$this->getChunkSizeHeight()	."<br>";
+		echo "Imagepath: "		.$this->getimagePath()			."<br>";
+		echo "Resolution X: "	.$this->getresolutionWidth()	."<br>";
+		echo "Resolution Y: "	.$this->getresolutionHeight()	."<br>";
+		echo "Chunk X: "		.$this->getchunkSizeWidth()		."<br>";
+		echo "Chunk Y: "		.$this->getchunkSizeHeight()	."<br>";
 
-		echo "ColorsCollection:<br> <pre>";
-		print_r($this->getColorsCollection());
+		echo "colorsCollection:<br> <pre>";
+		print_r($this->getcolorsCollection());
 		echo "</pre>";
 		echo '<div><hr></div>';
 	}
@@ -119,8 +119,8 @@ class pixelate {
      * @echo
     */
 	public function showPossibleChunkSize(){
-        $imagewidth 	= $this->getResolutionWidth();
-        $imageheight 	= $this->getResolutionHeight();
+        $imagewidth 	= $this->getresolutionWidth();
+        $imageheight 	= $this->getresolutionHeight();
 
         echo 'Possible sizes width:';
         for($position = 0; $position <= $imagewidth; $position++){
@@ -157,7 +157,7 @@ class pixelate {
      * @echo
     */
 	public function rawImage(){
-		echo '<img src="'.$this->getImagePath().'" style="width:40vw;" />';
+		echo '<img src="'.$this->getimagePath().'" style="width:40vw;" />';
 		echo '<br>';
 	}
 
@@ -166,15 +166,15 @@ class pixelate {
      * @echo
     */
 	public function renderImage(){
-		$colors 		= $this->getColorsCollection();
+		$colors 		= $this->getcolorsCollection();
 		
-		$width 			= $this->getChunkSizeWidth() / 5;
+		$width 			= $this->getchunkSizeWidth() / 5;
 		$height 		= $this->getChunksizeHeight() / 5;
 
-		$source_width 	= $this->getResolutionWidth();
-		$source_height 	= $this->getResolutionHeight();
+		$source_width 	= $this->getresolutionWidth();
+		$source_height 	= $this->getresolutionHeight();
 
-		$stopper 		= $this->getResolutionWidth() / $this->getChunkSizeWidth();
+		$stopper 		= $this->getresolutionWidth() / $this->getchunkSizeWidth();
 
 		foreach ($colors as $key => $value) {
 			if ((($key % $stopper) == 0) && ($key != 0) ){
@@ -191,15 +191,15 @@ class pixelate {
     */
 	public function createChunks(){
 
-		$width 			= $this->getChunkSizeWidth();
+		$width 			= $this->getchunkSizeWidth();
 		$height 		= $this->getChunksizeHeight();
 
-		$source 		= $this->getImageResource();
-		$source_width 	= $this->getResolutionWidth();
-		$source_height 	= $this->getResolutionHeight();
+		$source 		= $this->getimageResource();
+		$source_width 	= $this->getresolutionWidth();
+		$source_height 	= $this->getresolutionHeight();
 
-		$this->setTempImageWidth($source_width / $width);
-		$this->setTempImageHeight($source_height / $height);
+		$this->settempImageWidth($source_width / $width);
+		$this->settempImageHeight($source_height / $height);
 
 		for( $row = 0; $row < $source_height / $height; $row++)
 		{
@@ -213,8 +213,8 @@ class pixelate {
 		    }
 		}
 
-		$this->setResultImageCols($col);
-		$this->setResultImageRows($row);
+		$this->setresultImageCols($col);
+		$this->setresultImageRows($row);
 	}
 
     /**
@@ -222,11 +222,11 @@ class pixelate {
      * 
     */
 	public function setResolution(){
-		$width 	= imagesx($this->getImageResource());
-		$height = imagesy($this->getImageResource()); 
+		$width 	= imagesx($this->getimageResource());
+		$height = imagesy($this->getimageResource()); 
 		
-		$this->setResolutionWidth($width);
-		$this->setResolutionHeight($height);
+		$this->setresolutionWidth($width);
+		$this->setresolutionHeight($height);
 	}
 
     /**
@@ -260,25 +260,25 @@ class pixelate {
 		$bAverage = round($bTotal/$total);
 
 		$rgb = $rAverage.",".$gAverage.",".$bAverage;
-		$this->setColorsCollection($rgb);
+		$this->setcolorsCollection($rgb);
 	}
 
     /**
      * @return mixed
      */
-    public function getImageResource()
+    public function getimageResource()
     {
-        return $this->ImageResource;
+        return $this->imageResource;
     }
 
     /**
-     * @param mixed $ImageResource
+     * @param mixed $imageResource
      *
      * @return self
      */
-    public function setImageResource($ImageResource)
+    public function setimageResource($imageResource)
     {
-        $this->ImageResource = $ImageResource;
+        $this->imageResource = $imageResource;
 
         return $this;
     }
@@ -286,19 +286,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getResolutionWidth()
+    public function getresolutionWidth()
     {
-        return $this->ResolutionWidth;
+        return $this->resolutionWidth;
     }
 
     /**
-     * @param mixed $ResolutionWidth
+     * @param mixed $resolutionWidth
      *
      * @return self
      */
-    public function setResolutionWidth($ResolutionWidth)
+    public function setresolutionWidth($resolutionWidth)
     {
-        $this->ResolutionWidth = $ResolutionWidth;
+        $this->resolutionWidth = $resolutionWidth;
 
         return $this;
     }
@@ -306,19 +306,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getResolutionHeight()
+    public function getresolutionHeight()
     {
-        return $this->ResolutionHeight;
+        return $this->resolutionHeight;
     }
 
     /**
-     * @param mixed $ResolutionHeight
+     * @param mixed $resolutionHeight
      *
      * @return self
      */
-    public function setResolutionHeight($ResolutionHeight)
+    public function setresolutionHeight($resolutionHeight)
     {
-        $this->ResolutionHeight = $ResolutionHeight;
+        $this->resolutionHeight = $resolutionHeight;
 
         return $this;
     }
@@ -326,19 +326,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getChunkSizeWidth()
+    public function getchunkSizeWidth()
     {
-        return $this->ChunkSizeWidth;
+        return $this->chunkSizeWidth;
     }
 
     /**
-     * @param mixed $ChunkSizeWidth
+     * @param mixed $chunkSizeWidth
      *
      * @return self
      */
-    public function setChunkSizeWidth($ChunkSizeWidth)
+    public function setchunkSizeWidth($chunkSizeWidth)
     {
-        $this->ChunkSizeWidth = $ChunkSizeWidth;
+        $this->chunkSizeWidth = $chunkSizeWidth;
 
         return $this;
     }
@@ -346,19 +346,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getChunkSizeHeight()
+    public function getchunkSizeHeight()
     {
-        return $this->ChunkSizeHeight;
+        return $this->chunkSizeHeight;
     }
 
     /**
-     * @param mixed $ChunkSizeHeight
+     * @param mixed $chunkSizeHeight
      *
      * @return self
      */
-    public function setChunkSizeHeight($ChunkSizeHeight)
+    public function setchunkSizeHeight($chunkSizeHeight)
     {
-        $this->ChunkSizeHeight = $ChunkSizeHeight;
+        $this->chunkSizeHeight = $chunkSizeHeight;
 
         return $this;
     }
@@ -366,19 +366,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getImagePath()
+    public function getimagePath()
     {
-        return $this->ImagePath;
+        return $this->imagePath;
     }
 
     /**
-     * @param mixed $ImagePath
+     * @param mixed $imagePath
      *
      * @return self
      */
-    public function setImagePath($ImagePath)
+    public function setimagePath($imagePath)
     {
-        $this->ImagePath = $ImagePath;
+        $this->imagePath = $imagePath;
 
         return $this;
     }
@@ -386,19 +386,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getColorsCollection()
+    public function getcolorsCollection()
     {
-        return $this->ColorsCollection;
+        return $this->colorsCollection;
     }
 
     /**
-     * @param mixed $ColorsCollection
+     * @param mixed $colorsCollection
      *
      * @return self
      */
-    public function setColorsCollection($ColorsCollection)
+    public function setcolorsCollection($colorsCollection)
     {
-        $this->ColorsCollection[] = $ColorsCollection;
+        $this->colorsCollection[] = $colorsCollection;
 
         return $this;
     }
@@ -406,19 +406,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getTempImageWidth()
+    public function gettempImageWidth()
     {
-        return $this->TempImageWidth;
+        return $this->tempImageWidth;
     }
 
     /**
-     * @param mixed $TempImageWidth
+     * @param mixed $tempImageWidth
      *
      * @return self
      */
-    public function setTempImageWidth($TempImageWidth)
+    public function settempImageWidth($tempImageWidth)
     {
-        $this->TempImageWidth = $TempImageWidth;
+        $this->tempImageWidth = $tempImageWidth;
 
         return $this;
     }
@@ -426,19 +426,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getTempImageHeight()
+    public function gettempImageHeight()
     {
-        return $this->TempImageHeight;
+        return $this->tempImageHeight;
     }
 
     /**
-     * @param mixed $TempImageHeight
+     * @param mixed $tempImageHeight
      *
      * @return self
      */
-    public function setTempImageHeight($TempImageHeight)
+    public function settempImageHeight($tempImageHeight)
     {
-        $this->TempImageHeight = $TempImageHeight;
+        $this->tempImageHeight = $tempImageHeight;
 
         return $this;
     }
@@ -446,19 +446,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getResultImageWidth()
+    public function getresultImageWidth()
     {
-        return $this->ResultImageWidth;
+        return $this->resultImageWidth;
     }
 
     /**
-     * @param mixed $ResultImageWidth
+     * @param mixed $resultImageWidth
      *
      * @return self
      */
-    public function setResultImageWidth($ResultImageWidth)
+    public function setresultImageWidth($resultImageWidth)
     {
-        $this->ResultImageWidth = $ResultImageWidth;
+        $this->resultImageWidth = $resultImageWidth;
 
         return $this;
     }
@@ -466,19 +466,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getResultImageCols()
+    public function getresultImageCols()
     {
-        return $this->ResultImageCols;
+        return $this->resultImageCols;
     }
 
     /**
-     * @param mixed $ResultImageCols
+     * @param mixed $resultImageCols
      *
      * @return self
      */
-    public function setResultImageCols($ResultImageCols)
+    public function setresultImageCols($resultImageCols)
     {
-        $this->ResultImageCols = $ResultImageCols;
+        $this->resultImageCols = $resultImageCols;
 
         return $this;
     }
@@ -486,19 +486,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getResultImageRows()
+    public function getresultImageRows()
     {
-        return $this->ResultImageRows;
+        return $this->resultImageRows;
     }
 
     /**
-     * @param mixed $ResultImageRows
+     * @param mixed $resultImageRows
      *
      * @return self
      */
-    public function setResultImageRows($ResultImageRows)
+    public function setresultImageRows($resultImageRows)
     {
-        $this->ResultImageRows = $ResultImageRows;
+        $this->resultImageRows = $resultImageRows;
 
         return $this;
     }
@@ -506,19 +506,19 @@ class pixelate {
     /**
      * @return mixed
      */
-    public function getResultImagePath()
+    public function getresultimagePath()
     {
-        return $this->ResultImagePath;
+        return $this->resultimagePath;
     }
 
     /**
-     * @param mixed $ResultImagePath
+     * @param mixed $resultimagePath
      *
      * @return self
      */
-    public function setResultImagePath($ResultImagePath)
+    public function setresultimagePath($resultimagePath)
     {
-        $this->ResultImagePath = $ResultImagePath;
+        $this->resultimagePath = $resultimagePath;
 
         return $this;
     }

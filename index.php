@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 require_once('class.pixelate.php');
 
-$pixelate = new pixelate('anime.jpg','unused.jpg', 40, 40);
+$pixelate = new Pixelate('anime.jpg','unused.jpg', 40, 40);
 $pixelate->setResolution();
 
 //$pixelate->showPossibleChunkSize();
