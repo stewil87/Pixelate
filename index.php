@@ -6,14 +6,15 @@ error_reporting(E_ALL);
 
 require_once('class.pixelate.php');
 
-$pixelate = new Pixelate('anime.jpg','unused.jpg', 40, 40);
+$pixelate = new Pixelate('Desert.jpg','dest.jpg', 32, 64);
 $pixelate->setResolution();
 
-//$pixelate->showPossibleChunkSize();
+$pixelate->showPossibleChunkSize();
 $pixelate->createChunks();
 
 //$pixelate->debug();
 $pixelate->rawImage();
 $pixelate->renderImage();
+$pixelate->createImage();
 
 ?>
