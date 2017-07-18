@@ -149,27 +149,31 @@ class Pixelate {
     */
 	public function createImage(){
 
-        $imageTargetResource = @ImageCreate($this->getResolutionWidth(), $this->getResolutionHeight());
+        $imageTargetResource = @imagecreatetruecolor($this->getResolutionWidth(), $this->getResolutionHeight());
         $imageTargetColors = $this->getColorsCollection();
 
         $actRow = 0;
+        $actCol = 0;
 
         foreach ($imageTargetColors as $colorKey => $colorValue) {
-
+            $imageColorExploded = array();
             $imageColorExploded = explode(',', $colorValue);
 
             $colorInt = imagecolorallocate ( $imageTargetResource , $imageColorExploded[0] , $imageColorExploded[1], $imageColorExploded[2] );
 
-            $x1 = $colorKey * $this->getChunksizeWidth();
+            $x1 = $actCol * $this->getChunksizeWidth();
             $y1 = $actRow * $this->getChunksizeHeight();
 
-            $x2 = ($colorKey * $this->getChunksizeWidth()) + $this->getChunksizeWidth();
+            $x2 = ($actCol * $this->getChunksizeWidth()) + $this->getChunksizeWidth();
             $y2 = ($actRow * $this->getChunksizeHeight()) + $this->getChunksizeHeight();
 
             imagefilledrectangle($imageTargetResource, $x1, $y1, $x2, $y2, $colorInt);
 
-            if($colorKey % $this->getResultImageCols() == 0){
+            $actCol++;
+
+            if($colorKey!= 0 && $colorKey % $this->getResultImageCols() == 0){
                 $actRow++;
+                $actCol = 0;
             }
         }
 

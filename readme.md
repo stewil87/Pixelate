@@ -38,5 +38,5 @@ There are no file security checks, yet. Please use in any way, but not for produ
 	//render !HTML Based! version of the average chunks (many, many, many <spans>)	
 	$pixelate->renderImage();
 
-	//Todo
 	//Recreate as new image
+	$pixelate->createImage();
