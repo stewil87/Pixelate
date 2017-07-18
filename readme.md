@@ -1,4 +1,4 @@
-# PHP Class pixelate
+# Class Pixelate written in PHP
 
 ## What it is
 
