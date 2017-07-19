@@ -18,7 +18,7 @@ There are no file security checks, yet. Please use in any way, but not for produ
 	require_once('class.pixelate.php');
 
 	// class.pixelate([string] SOURCE_PATH, [string] NOTUSED_OUTPUT, [int] CHUNKSIZE_WIDTH_IN_PIXEL, [int] CHUNKSIZE_HEIGHT_IN_PIXEL);
-	$pixelate = new pixelate('picture.jpg','unused.jpg', 40, 40);
+	$pixelate = new Pixelate('picture.jpg','unused.jpg', 40, 40);
 
 	//sets image information
 	$pixelate->setResolution();
