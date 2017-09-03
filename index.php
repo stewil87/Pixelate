@@ -14,7 +14,7 @@ $pixelate->createChunks();
 
 //$pixelate->debug();
 //$pixelate->rawImage();
-//$pixelate->renderImage();
-$pixelate->createImage();
+$pixelate->renderImage();
+//$pixelate->createImage();
 
 ?>
