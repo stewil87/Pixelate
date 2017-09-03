@@ -6,15 +6,15 @@
 
 require_once('class.pixelate.php');
 
-$pixelate = new Pixelate('source.jpg','destination.jpg', 32, 32);
+$pixelate = new Pixelate('badmercy.jpg','destination.jpg', 12, 10);
 $pixelate->setResolution();
 
 $pixelate->showPossibleChunkSize();
 $pixelate->createChunks();
 
 //$pixelate->debug();
-$pixelate->rawImage();
-$pixelate->renderImage();
+//$pixelate->rawImage();
+//$pixelate->renderImage();
 $pixelate->createImage();
 
 ?>
